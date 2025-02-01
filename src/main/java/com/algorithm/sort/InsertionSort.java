@@ -1,5 +1,8 @@
 package com.algorithm.sort;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * 插入排序算法
  * 
@@ -33,11 +36,26 @@ package com.algorithm.sort;
 public class InsertionSort implements Sort {
     @Override
     public void sort(int[] arr) {
-        // 在这里实现插入排序算法
-        // 提示：
-        // 1. 从第二个元素开始，认为第一个元素已经有序
-        // 2. 取出当前元素，与已排序部分从后向前比较
-        // 3. 找到合适的位置插入
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+
+        // 从第二个元素开始，认为第一个元素已经有序
+        for (int i = 1; i < arr.length; i++) {
+            // 保存当前要插入的元素
+            int current = arr[i];
+            // 已排序部分的最后一个位置
+            int j = i - 1;
+            
+            // 从后向前查找插入位置，将大于current的元素都向后移动一位
+            while (j >= 0 && arr[j] > current) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            
+            // 找到插入位置，将current插入
+            arr[j + 1] = current;
+        }
     }
 
     @Override

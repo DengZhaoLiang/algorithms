@@ -40,11 +40,47 @@ package com.algorithm.sort;
 public class CountingSort implements Sort {
     @Override
     public void sort(int[] arr) {
-        // 在这里实现计数排序算法
-        // 提示：
-        // 1. 找出数组的最大值和最小值
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+
+        // 1. 找出数组中的最大值和最小值
+        int max = arr[0], min = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+            if (arr[i] < min) {
+                min = arr[i];
+            }
+        }
+
+        // 计算计数数组的大小（优化：减少不必要的空间）
+        int range = max - min + 1;
+        
         // 2. 创建计数数组并统计每个元素出现的次数
-        // 3. 根据计数数组重新排列原数组
+        int[] count = new int[range];
+        for (int num : arr) {
+            count[num - min]++;
+        }
+
+        // 3. 计算累积次数（这步是为了保证排序的稳定性）
+        for (int i = 1; i < count.length; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // 4. 创建临时数组存储排序结果
+        int[] output = new int[arr.length];
+        
+        // 从后向前遍历原数组，保证排序的稳定性
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int current = arr[i] - min;
+            output[count[current] - 1] = arr[i];
+            count[current]--;
+        }
+
+        // 5. 将结果复制回原数组
+        System.arraycopy(output, 0, arr, 0, arr.length);
     }
 
     @Override
